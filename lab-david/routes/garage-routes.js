@@ -4,6 +4,7 @@ const Router = require('express').Router;
 const jsonParser = require('body-parser').json();
 const debug = require('debug')('car:garage-routes');
 const Garage = require('../model/garage.js');
+const createError = require('http-errors');
 const garageRouter = module.exports = new Router();
 
 garageRouter.get('/api/garage/:garageId', (req,res,next) => {
@@ -11,11 +12,16 @@ garageRouter.get('/api/garage/:garageId', (req,res,next) => {
 
   Garage.findById(req.params.garageId)
     .then( garage => res.json(garage))
-    .catch(next);
+    .catch(err => {
+      err = createError(404, 'Not Found');
+      next(err);
+    });
 });
 
 garageRouter.post('/api/garage', jsonParser, (req,res,next) => {
   debug('POST: /api/garage');
+  if(!req.body.name) next(createError(400, 'bad request'));
+  if(!req.body.datecreated) next(createError(400, 'bad request'));
 
   req.body.lastmodified = new Date();
   new Garage(req.body).save()
@@ -25,10 +31,13 @@ garageRouter.post('/api/garage', jsonParser, (req,res,next) => {
 
 garageRouter.put('/api/garage/', jsonParser, (req,res,next) => {
   debug('PUT: /api/garage');
-
+  console.log(req.body);
   req.body.lastmodified = new Date();
-  Garage.findByIdAndUpdate(req.body._id, req.body)
-    .then(garage => res.json(garage))
+  Garage.findByIdAndUpdate(req.body._id, { new: true }, req.body)
+    .then(garage => {
+      console.log(garage);
+      res.json(garage);
+    })
     .catch(next);
 });
 
