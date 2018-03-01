@@ -39,6 +39,7 @@ describe('Beer Routes', function() {
             if(err) return done(err);
             expect(res.status).toEqual(200);
             expect(res.body.name).toEqual('test beer name');
+            expect(res.body.style).toEqual('test style');
             this.tempBeer = res.body;
             done();
           });
@@ -128,6 +129,8 @@ describe('Beer Routes', function() {
           .end((err, res) => {
             if(err) return done(err);
             expect(res.status).toEqual(200);
+            expect(res.body.name).toEqual('new test beer');
+            expect(res.body.style).toEqual('new test style');
             done();
           });
       });

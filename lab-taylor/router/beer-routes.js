@@ -35,7 +35,7 @@ beerRouter.put('/api/beer/:beerId', jsonParser, function(req, res, next) {
   
   
   req.body.timestamp = new Date();
-  Beer.findByIdAndUpdate(req.params.beerId, req.body)
+  Beer.findByIdAndUpdate(req.params.beerId, req.body, {new: true})
     .then( beer => res.json(beer))
     .catch(err => next(createError(404, err.message)));
 });
