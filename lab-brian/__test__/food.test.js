@@ -152,6 +152,15 @@ describe('Food Routes', function() {
           });
       });
 
+      it('should respond with a 400', done => {
+        request.put(`${url}/api/food`)
+          .send()
+          .end((err, res) => {
+            expect(res.status).toEqual(400);
+            done();
+          });
+      });
+
     });
   });
 
@@ -192,6 +201,14 @@ describe('Food Routes', function() {
         request.delete(`${url}/api/food/404`)
           .end((err, res) => {
             expect(res.status).toEqual(404);
+            done();
+          });
+      });
+
+      it('should not delete and return a 400 error', (done) => {
+        request.delete(`${url}/api/food`)
+          .end((err, res) => {
+            expect(res.status).toEqual(400);
             done();
           });
       });

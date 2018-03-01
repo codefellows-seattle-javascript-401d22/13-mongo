@@ -45,7 +45,6 @@ foodRouter.post('/api/food', jsonParser, function(req, res, next) {
 // http PUT :3000/api/food/5a979e472c577c679758e018 name=new food price=100
 foodRouter.put('/api/food/:foodID', jsonParser, function(req, res, next) {
   debug('PUT: /api/food/:foodID');
-  if (!req.params.foodID) return next(createError(400, 'expected foodID'));
   if (!req.body.name) return next(createError(400, 'expected a request body name'));
   if (!req.body.price) return next(createError(400, 'expected a request body price'));
 
@@ -57,10 +56,15 @@ foodRouter.put('/api/food/:foodID', jsonParser, function(req, res, next) {
     });
 });
 
+// http PUT :3000/api/food name=new food price=100
+foodRouter.put('/api/food', function(req, res, next) {
+  debug('PUT: /api/food');
+  return next(createError(400, 'expected foodID'));
+});
+
 // http DELETE :3000/api/food/5a979e472c577c679758e018
 foodRouter.delete('/api/food/:foodID', function(req, res, next) {
   debug('DELETE: /api/food/:foodID');
-  if (!req.params.foodID) return next(createError(400, 'expected foodID'));
 
   Food.findByIdAndRemove(req.params.foodID)
     .then( () => {
@@ -74,3 +78,10 @@ foodRouter.delete('/api/food/:foodID', function(req, res, next) {
       next(err);
     });
 });
+
+// http DELETE :3000/api/food
+foodRouter.delete('/api/food', function(req, res, next) {
+  debug('DELETE: /api/food');
+  return next(createError(400, 'expected foodID'));
+});
+
