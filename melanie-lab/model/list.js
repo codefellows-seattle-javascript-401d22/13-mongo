@@ -8,4 +8,4 @@ const listSchema = Schema({
   timestamp: { type: Date, required: true },
 });
 
-module.exports = mongoose.model('List', listSchema);
+module.exports = mongoose.model('list', listSchema);
