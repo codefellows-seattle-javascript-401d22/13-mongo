@@ -23,7 +23,7 @@
 1. To install this application, download the files from this repository
 2. `cd` to the repository directory and run `npm i`
 3. Use `npm run start` or `node server.js` to start the server connection
-4. Alternatively, run `npm run test` to run tests
+4. Alternatively, run `npm run test` or `npm run test-coverage` to run tests
 
 ## Server Endpoints
 Users can make the following requests:
