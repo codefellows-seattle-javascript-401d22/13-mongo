@@ -4,6 +4,7 @@ const Router = require('express').Router;
 const jsonParser = require('body-parser').json();
 const debug = require('debug')('movie:list-route');
 const List = require('../model/list');
+const createError = require('http-errors');
 
 const listRouter = module.exports = new Router();
 
@@ -12,7 +13,7 @@ listRouter.get('/api/list/:listId', function(req, res, next) {
 
   List.findById(req.params.listId)
     .then( list => res.json(list))
-    .catch(next);
+    .catch(err => next(createError(404, err.message)));
 });
 
 listRouter.post('/api/list', jsonParser, function(req, res, next) {
@@ -21,7 +22,7 @@ listRouter.post('/api/list', jsonParser, function(req, res, next) {
   req.body.timestamp = new Date();
   new List(req.body).save()
     .then( list => res.json(list))
-    .catch(next);
+    .catch(err => next(err));    
 });
 
 listRouter.put('/api/list/:listId', jsonParser, function(req, res, next) {
@@ -29,7 +30,8 @@ listRouter.put('/api/list/:listId', jsonParser, function(req, res, next) {
 
   List.findByIdAndUpdate(req.params.listId)
     .then( list => res.json(list))
-    .catch(next);
+    .catch(err => next(createError(400, err.message)));
+    
 });
 
 listRouter.delete('/api/list/:listId', function(req, res, next) {
@@ -37,5 +39,5 @@ listRouter.delete('/api/list/:listId', function(req, res, next) {
 
   List.findByIdAndRemove(req.params.listId)
     .send( () => res.status(204))
-    .catch(next);
+    .catch(err => next(err));    
 });
