@@ -6,12 +6,12 @@ const debug = require('debug')('note:list-route');
 const List = require('../modle/list.js');
 const listRouter = module.exports = new Router();
 
-listRouter.get('/api/list/:listId', function(req, res, nest){
+listRouter.get('/api/list/:listId', function(req, res, next){
   debug('GET: /api/list/:listId');
 
   List.findById(req.params.listId)
-  .then(list => res.json(list))
-  .catch(next);
+    .then(list => res.json(list))
+    .catch(next);
 });
 
 listRouter.post('/api/list', jsonParser, function(req, res, next){
@@ -19,6 +19,6 @@ listRouter.post('/api/list', jsonParser, function(req, res, next){
 
   req.body.timestamp = new Date();
   new List(req.body).save()
-  .then(list => res.json(list))
-  .catch(next);
+    .then(list => res.json(list))
+    .catch(next);
 });
