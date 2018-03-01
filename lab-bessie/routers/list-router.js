@@ -3,6 +3,7 @@
 const Router = require('express').Router;
 const jsonParser = require('body-parser').json();
 const debug = require('debug')('strains:list-router');
+// const createError = require('http-errors');
 const List = require('../model/list.js');
 const listRouter = module.exports = new Router();
 
