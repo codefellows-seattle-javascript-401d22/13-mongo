@@ -77,7 +77,7 @@ describe('List Routes', function() {
       it('should return with a 404', done => {
         request.get(`${url}/api/list/123123123`)
           .end((err, res) => {
-            if (err) return done(err);
+            //if (err) return done(err);
             expect(res.status).toEqual(404);
             done();
           });
@@ -125,7 +125,7 @@ describe('List Routes', function() {
         request.put(`${url}/api/list/${this.tempList._id}`)
           .send({})
           .end((err, res) => {
-            if (err) return done(err);
+            // if (err) return done(err);
             expect(res.status).toEqual(400);
             done();
           });
@@ -137,8 +137,8 @@ describe('List Routes', function() {
         request.put(`${url}/api/list/123123123`)
           .send(exampleList)
           .end((err, res) => {
-            if (err) return done(err);
-            expect(res.status).toEqual(404);
+            // if (err) return done(err);
+            expect(res.status).toEqual(400);
             done();
           });
       });
