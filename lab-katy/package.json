@@ -1,7 +1,6 @@
 {
   "name": "weed-app",
   "version": "1.0.0",
-  "description": "",
   "main": "server.js",
   "scripts": {
     "test": "DEBUG='weed*' jest",
@@ -24,5 +23,6 @@
   "devDependencies": {
     "jest": "^22.4.2",
     "superagent": "^3.8.2"
-  }
+  },
+  "description": ""
 }
