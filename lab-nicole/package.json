@@ -1,0 +1,27 @@
+{
+  "name": "lab-nicole",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "DEBUG='doggo*' jest",
+    "start": "DEBUG='doggo*' node server.js",
+    "debug": "DEBUG='doggo*' jest --debug",
+    "lint": "eslint"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
+    "debug": "^3.1.0",
+    "express": "^4.16.2",
+    "mongoose": "^5.0.7"
+  },
+  "devDependencies": {
+    "jest": "^22.4.2",
+    "morgan": "^1.9.0",
+    "superagent": "^3.8.2"
+  }
+}
