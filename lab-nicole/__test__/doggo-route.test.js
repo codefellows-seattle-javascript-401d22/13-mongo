@@ -32,9 +32,19 @@ describe('Doggo Routes', function() {
           done();
         });
     });
+
+    it('should respond with a 400 if a valid body is not provided', done => {
+      superagent.post(`${url}/api/doggo`)
+        .send({ name: 'Chlo' })
+        .end((err, res) => {
+          expect(res.status).toEqual(400);
+          expect(res.text).toEqual('bad request');
+          done();
+        });
+    });
   });
 
-  describe(`GET /api/doggo/${this.doggoId}`, () => {
+  describe(`GET /api/doggo/:id`, () => {
     it('should get a doggo', done => {
       superagent.get(`${url}/api/doggo/${this.doggoId}`)
         .end((err, res) => {
@@ -45,16 +55,18 @@ describe('Doggo Routes', function() {
           done();
         });
     });
+
     it('should respond with a 404 for an id that does not exist', done => {
       superagent.get(`${url}/api/doggo/1234567890`)
         .end((err, res) => {
           expect(res.status).toEqual(404);
           expect(res.text).toEqual('not found');
+          done();
         });
     });
   });
 
-  describe(`PUT /api/doggo/${this.doggoId}`, () => {
+  describe(`PUT /api/doggo/:id`, () => {
     it('should update a doggo', done => {
       superagent.put(`${url}/api/doggo/${this.doggoId}`)
         .send({ name: 'New Chloe', age: 3})
@@ -66,9 +78,29 @@ describe('Doggo Routes', function() {
           done();
         });
     });
+
+    it('should respond with a 400 if no body is provided', done => {
+      superagent.put(`${url}/api/doggo/${this.doggoId}`)
+        .send({})
+        .end((err, res) => {
+          expect(res.status).toEqual(400);
+          expect(res.text).toEqual('bad request');
+          done();
+        });
+    });
+
+    it('should respond with a 404 if the id was not found', done => {
+      superagent.put(`${url}/api/doggo/12345678`)
+        .send({name: 'Chlo', age: 99})
+        .end((err, res) => {
+          expect(res.status).toEqual(404);
+          expect(res.text).toEqual('not found');
+          done();
+        });
+    });
   });
 
-  describe(`DELETE /api/doggo/${this.doggoId}`, () => {
+  describe(`DELETE /api/doggo/:id`, () => {
     it('should delete a doggo', done => {
       superagent.delete(`${url}/api/doggo/${this.doggoId}`)
         .end((err, res) => {
