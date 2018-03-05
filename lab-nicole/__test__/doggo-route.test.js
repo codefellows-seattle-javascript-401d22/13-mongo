@@ -10,7 +10,16 @@ require('jest');
 const url = `http://localhost:${PORT}`;
 
 describe('Doggo Routes', function() {
-  this.doggoId = undefined;
+  this.doggo = undefined;
+
+  beforeAll( done => {
+    new Doggo({name: 'Chloe', age: 4}).save()
+      .then( myDoggo => {
+        this.doggo = myDoggo;
+        done();
+      })
+      .catch(done);
+  });
 
   afterAll( done => {
     Doggo.remove({})
@@ -26,8 +35,8 @@ describe('Doggo Routes', function() {
         .end((err, res) => {
           if(err) return done(err);
           expect(res.status).toEqual(200);
-          expect(res.body.name).toEqual('Chloe');
-          expect(res.body.age).toEqual(4);
+          expect(res.body.name).toEqual(this.doggo.name);
+          expect(res.body.age).toEqual(this.doggo.age);
           this.doggoId = res.body._id;
           done();
         });
@@ -38,7 +47,7 @@ describe('Doggo Routes', function() {
         .send({ name: 'Chlo' })
         .end((err, res) => {
           expect(res.status).toEqual(400);
-          expect(res.text).toEqual('bad request');
+          expect(res.text).toEqual('Bad Request');
           done();
         });
     });
@@ -46,21 +55,21 @@ describe('Doggo Routes', function() {
 
   describe(`GET /api/doggo/:id`, () => {
     it('should get a doggo', done => {
-      superagent.get(`${url}/api/doggo/${this.doggoId}`)
+      superagent.get(`${url}/api/doggo/${this.doggo._id}`)
         .end((err, res) => {
           if (err) return done(err);
           expect(res.status).toEqual(200);
-          expect(res.body.name).toEqual('Chloe');
-          expect(res.body.age).toEqual(4);
+          expect(res.body.name).toEqual(this.doggo.name);
+          expect(res.body.age).toEqual(this.doggo.age);
           done();
         });
     });
 
     it('should respond with a 404 for an id that does not exist', done => {
-      superagent.get(`${url}/api/doggo/1234567890`)
+      superagent.get(`${url}/api/doggo/41224d776a326fb40f000001`)
         .end((err, res) => {
           expect(res.status).toEqual(404);
-          expect(res.text).toEqual('not found');
+          expect(res.text).toEqual('Not Found');
           done();
         });
     });
@@ -84,7 +93,7 @@ describe('Doggo Routes', function() {
         .send({})
         .end((err, res) => {
           expect(res.status).toEqual(400);
-          expect(res.text).toEqual('bad request');
+          expect(res.text).toEqual('Bad Request');
           done();
         });
     });
@@ -94,7 +103,7 @@ describe('Doggo Routes', function() {
         .send({name: 'Chlo', age: 99})
         .end((err, res) => {
           expect(res.status).toEqual(404);
-          expect(res.text).toEqual('not found');
+          expect(res.text).toEqual('Not Found');
           done();
         });
     });
@@ -116,7 +125,7 @@ describe('Doggo Routes', function() {
       superagent.get(`${url}/api/not-a-thing`)
         .end((err, res) => {
           expect(res.status).toEqual(404);
-          expect(res.text).toEqual('route not found');
+          expect(res.text).toEqual('Not Found');
           done();
         });
     });
