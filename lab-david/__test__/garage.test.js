@@ -14,6 +14,11 @@ const exampleGarage = {
   datecreated: new Date(),
 };
 
+const updatedGarage = {
+  name: 'updated garage',
+  datecreated: new Date(),
+};
+
 describe('Garage Routes', function(){
   describe('POST: /api/garage', function(){
     describe('with a valid req body', function(){
@@ -107,20 +112,42 @@ describe('Garage Routes', function(){
         new Garage(exampleGarage).save()
           .then( garage => {
             this.tempGarage = garage;
-            console.log(this.tempGarage);
             done();
           })
           .catch(done);
       });
 
       it('should return updated garage', done => {
+        updatedGarage._id = this.tempGarage._id;
         request.put(`${url}/api/garage`)
-          .send({name: 'new name'})
+          .send(updatedGarage)
           .end((err,res) => {
-            // console.log(res);
             expect(res.status).toEqual(200);
-            expect(res.body._id).toEqual(this.tempGarage._id);
-            expect(res.body.name).toEqual('new name');
+            expect(res.body._id).toEqual(this.tempGarage._id.toString());
+            expect(res.body.name).toEqual(updatedGarage.name);
+            done();
+          });
+      });
+    });
+
+    describe('with an invalid id or body', function(){
+      it('should return a 400 error', done => {
+        request.put(`${url}/api/garage`)
+          .send()
+          .end((err,res) => {
+            expect(err.status).toEqual(400);
+            expect(res.status).toEqual(400);
+            done();
+          });
+      });
+
+      it('should return a 404 error', done => {
+        exampleGarage._id = 1234;
+        request.put(`${url}/api/garage`)
+          .send(exampleGarage)
+          .end((err,res) => {
+            expect(err.status).toEqual(404);
+            expect(res.status).toEqual(404);
             done();
           });
       });

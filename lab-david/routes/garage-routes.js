@@ -29,16 +29,19 @@ garageRouter.post('/api/garage', jsonParser, (req,res,next) => {
     .catch(next);
 });
 
-garageRouter.put('/api/garage/', jsonParser, (req,res,next) => {
+garageRouter.put('/api/garage', jsonParser, (req,res,next) => {
   debug('PUT: /api/garage');
-  console.log(req.body);
+  if(!req.body._id || !req.body.name || !req.body.datecreated) next(createError(400, 'bad request'));
+
   req.body.lastmodified = new Date();
-  Garage.findByIdAndUpdate(req.body._id, { new: true }, req.body)
+  Garage.findByIdAndUpdate(req.body._id, req.body, { new: true })
     .then(garage => {
-      console.log(garage);
       res.json(garage);
     })
-    .catch(next);
+    .catch(err => {
+      err = createError(404, err.message);
+      next(err);
+    });
 });
 
 garageRouter.delete('/api/garage/:garageId', (req,res,next) => {
