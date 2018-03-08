@@ -4,7 +4,6 @@ const Router = require('express').Router;
 const jsonParser = require('body-parser').json();
 const debug = require('debug')('weed:list-route');
 const List = require('../model/list.js');
-const createError = require('http-errors');
 
 const listRouter = module.exports = new Router();
 

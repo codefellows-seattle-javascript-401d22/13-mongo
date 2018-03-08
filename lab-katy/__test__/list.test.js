@@ -3,7 +3,6 @@
 const request = require('superagent');
 const List = require('../model/list.js');
 const PORT = process.env.PORT || 3000;
-const mongoose = require('mongoose');
 
 require('../server.js');
 require('jest');
