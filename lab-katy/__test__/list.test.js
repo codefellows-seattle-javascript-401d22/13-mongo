@@ -39,13 +39,11 @@ describe('List Routes', function() {
           });
       });
 
-      //POST 400 test not passing
       describe('with no request body', function() {
         it('should respond with bad request', done => {
           request.post(`${url}/api/list`)
             .send({})
             .end((err, res) => {
-              // console.log(res.body);
               expect(res.status).toEqual(400);
               done();
             });
@@ -89,7 +87,7 @@ describe('List Routes', function() {
           });
       });
 
-      //GET 404 test not passing
+  
       describe('with id not found', function() {
         it('should return 404', done => {
           request.get(`${url}/api/list/`)
@@ -129,14 +127,12 @@ describe('List Routes', function() {
 
       it('should return an updated list', done => {
         let updateList = { name: 'test updated list name' };
-        console.log('TEST UPDATE:', this.tempList._id);
 
         request.put(`${url}/api/list/${this.tempList._id}`)
           .send(updateList)
           .end((err, res) => {
             if(err) return done(err);
             expect(res.status).toEqual(200);
-            console.log('RES BODY', res.body);
             expect(res.body._id).toEqual(this.tempList._id.toString());
             expect(res.body.name).toEqual(updateList.name);
             done();

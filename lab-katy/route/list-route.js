@@ -4,6 +4,7 @@ const Router = require('express').Router;
 const jsonParser = require('body-parser').json();
 const debug = require('debug')('weed:list-route');
 const List = require('../model/list.js');
+const createError = require('http-errors');
 
 const listRouter = module.exports = new Router();
 
@@ -40,7 +41,7 @@ listRouter.post('/api/list', jsonParser, function(req, res, next) {
     .catch( err => next(err));
 });
 
-//PUT //check up on this
+//PUT 
 
 listRouter.put('/api/list/:listId', jsonParser, function(req, res, next) {
   debug('PUT: /api/list/:listId');
@@ -57,6 +58,7 @@ listRouter.delete('/api/list/:listId', function(req, res, next) {
   debug('DELETE: /api/list/:listId');
 
   List.findByIdAndRemove(req.params.listId)
-    .catch(next);
+    .then( () => res.status(204).send())
+    .catch( err => next(createError(404, err.message)));
 });
 
