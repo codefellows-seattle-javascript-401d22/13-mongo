@@ -3,6 +3,7 @@
 const Router = require('express').Router;
 const jsonParser = require('body-parser').json();
 const debug = require('debug')('note:list-route');
+const createError = require('http-errors');
 const List = require('../model/list.js');
 const listRouter = module.exports = new Router();
 
@@ -23,4 +24,11 @@ listRouter.post('/api/list', jsonParser, function(req, res, next) {
     .catch(next);
 });
 
+listRouter.delete('/api/list', function(req, res, next) {
+  debug('DELETE: /api/list:listId');
 
+  return next(createError(400, 'expected listId'));
+  
+});
+
+ 

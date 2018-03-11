@@ -1,5 +1,3 @@
-// import { listenerCount } from 'cluster';
-
 'use strict';
 
 const request = require('superagent');
