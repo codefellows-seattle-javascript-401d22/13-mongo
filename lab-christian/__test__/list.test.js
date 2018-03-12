@@ -3,8 +3,9 @@
 const request = require('superagent');
 const List = require('../model/list');
 const PORT = process.env.PORT || 3000;
+const serverToggle = require('../lib/server-toggle');
+const server = require('../server');
 
-require('../server');
 require('jest');
 
 const url = `http://localhost:${PORT}`;
@@ -14,8 +15,17 @@ const exampleList = {
 };
 
 describe('List Routes', function() {
-  describe('POST: /api/list', function() {
-    describe('with a valid request body', function() {
+  
+  beforeAll( done => {
+    serverToggle.serverOn(server, done);
+  });
+
+  afterAll( done => {
+    serverToggle.serverOff(server, done);
+  });
+
+  describe('POST: /api/list', () => {
+    describe('with a valid request body', () => {
       afterEach( done => {
         if (this.tempList) {
           List.remove({})
@@ -37,11 +47,20 @@ describe('List Routes', function() {
             done();
           });
       });
+
+      it('should return a 400 error', done => {
+        request.post(`${url}/api/list`)
+          .send()
+          .end((err, res) => {
+            expect(res.status).toEqual(400);
+            done();
+          });
+      });
     });
   });
   
-  describe('GET: /api/list/:listId', function() {
-    describe('with a valid body', function() {
+  describe('GET: /api/list/:listId', () => {
+    describe('with a valid body', () => {
       beforeEach( done => {
         exampleList.timestamp = new Date();
         new List(exampleList).save()
@@ -73,11 +92,10 @@ describe('List Routes', function() {
           });
       });
     });
-    describe('with with a valid request for an invalid id', function() {
+    describe('with with a valid request for an invalid id', () => {
       it('should return with a 404', done => {
         request.get(`${url}/api/list/123123123`)
           .end((err, res) => {
-            //if (err) return done(err);
             expect(res.status).toEqual(404);
             done();
           });
@@ -85,7 +103,7 @@ describe('List Routes', function() {
     });
   });
 
-  describe('PUT: /api/list/:listId', function() {
+  describe('PUT: /api/list/:listId', () => {
     beforeEach( done => {
       exampleList.timestamp = new Date();
       new List(exampleList).save()
@@ -106,7 +124,7 @@ describe('List Routes', function() {
       }
       done();
     });
-    describe('with a valid request, updated body', function() {
+    describe('with a valid request, updated body', () => {
       it('should return an updated list', done => {
         request.put(`${url}/api/list/${this.tempList._id}`)
           .send(exampleList)
@@ -120,25 +138,23 @@ describe('List Routes', function() {
       });
     });
     
-    describe('with no request body provied', function() {
+    describe('with no request body provided', () => {
       it('should return a 400 error', done => {
         request.put(`${url}/api/list/${this.tempList._id}`)
-          .send({})
+          .send()
           .end((err, res) => {
-            // if (err) return done(err);
             expect(res.status).toEqual(400);
             done();
           });
       });
     });
 
-    describe('with a valid request but an invalid id', function() {
+    describe('with a valid request but an invalid id', () => {
       it('should return a 404 error', done => {
-        request.put(`${url}/api/list/123123123`)
+        request.put(`${url}/api/list/asdqwrqwe`)
           .send(exampleList)
           .end((err, res) => {
-            // if (err) return done(err);
-            expect(res.status).toEqual(400);
+            expect(res.status).toEqual(404);
             done();
           });
       });

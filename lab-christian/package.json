@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "DEBUG='movie*' jest",
+    "test": "DEBUG='movie*' jest -i --verbose",
     "start": "DEBUG='movie*' node server.js",
     "lint": "eslint ."
   },
